@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    </head>
+    <body>
+        <div id="map" style="height: 700px;"></div>
+
+        <form action="/" method="POST">
+          <input name="min_rating_slider" id="min_rating_slider" type="range" min="0" max="9.9" value="{{min_rating}}" class="form-control-range">
+          <br><text style="font-size: xxx-large;"><span id="min_rating"></span> points </text>
+          <input type="submit" value="Submit">
+        </form>
+
+        <script type="text/javascript">
+            // The first parameter are the coordinates of the center of the map
+            // The second parameter is the zoom level
+            var map = L.map('map').setView([40.712, -74.006], 3);
+            
+            // {s}, {z}, {x} and {y} are placeholders for map tiles
+            // {x} and {y} are the x/y of where you are on the map
+            // {z} is the zoom level
+            // {s} is the subdomain of cartodb
+              var layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+            });
+            
+            // Now add the layer onto the map
+            map.addLayer(layer);
+
+            marker = new L.marker([ {{ hostels.iloc[0].lat }}, {{ hostels.iloc[0].lng }} ]).addTo(map)
+              .bindPopup("<strong>{{ hostels.iloc[0]['name'] }}</strong>");
+
+            marker = new L.marker([ {{ hostels.iloc[1].lat }}, {{ hostels.iloc[1].lng }} ]).addTo(map)
+              .bindPopup("<strong>{{ hostels.iloc[1]['name'] }}</strong>");
+
+            {% for i, hostel in hostels.iterrows() %}
+            
+            marker = new L.marker([ {{ hostel.lat }}, {{ hostel.lng }} ]).addTo(map)
+              .bindPopup("<strong>{{ hostel['name'] }}</strong>");
+
+            {% endfor %}
+
+            var bounds = new L.LatLngBounds([[{{hostels['lat'].max()}}, {{hostels['lng'].max()}}],[{{hostels['lat'].min()}}, {{hostels['lng'].min()}}]]);
+            map.fitBounds(bounds, { padding: [5, 5] });
+            
+          </script>
+          <script>
+          var slider1 = document.getElementById("min_rating_slider");
+          var output1 = document.getElementById("min_rating");
+          output1.innerHTML = slider1.value;
+          
+          slider1.oninput = function() {
+            output1.innerHTML = this.value;
+          }
+
+</script>
+
+    </body>
+</html>
