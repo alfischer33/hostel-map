@@ -14,6 +14,7 @@ def index():
         print(request.args)
         return render_template('index.html', hostels = filtered_hostel_df(hostels,request.args))
     else:
+        print(request.args)
         return render_template('index.html', hostels = filtered_hostel_df(hostels,request.args))
 
 @app.route('/json', methods=['GET'])

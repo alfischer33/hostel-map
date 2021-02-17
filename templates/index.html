@@ -7,7 +7,7 @@
         <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
     </head>
     <body>
-        <div id="map" style="height: 700px;"></div>
+        <div id="map" style="height: 1000px;"></div>
 
         <!-- <form action="/" method="POST">
           <input name="min_rating_slider" id="min_rating_slider" type="range" min="0" max="9.9" value="{{min_rating}}" class="form-control-range">
@@ -31,16 +31,13 @@
             // Now add the layer onto the map
             map.addLayer(layer);
 
-            marker = new L.marker([ {{ hostels.iloc[0].lat }}, {{ hostels.iloc[0].lng }} ]).addTo(map)
-              .bindPopup("<strong>{{ hostels.iloc[0]['name'] }}</strong>");
-
-            marker = new L.marker([ {{ hostels.iloc[1].lat }}, {{ hostels.iloc[1].lng }} ]).addTo(map)
-              .bindPopup("<strong>{{ hostels.iloc[1]['name'] }}</strong>");
+            // marker = new L.marker([ {{ hostels.iloc[0].lat }}, {{ hostels.iloc[0].lng }} ]).addTo(map)
+            //   .bindPopup("<strong>{{ hostels.iloc[0]['name'] }}</strong>");
 
             {% for i, hostel in hostels.iterrows() %}
             
             marker = new L.marker([ {{ hostel.lat }}, {{ hostel.lng }} ]).addTo(map)
-              .bindPopup("<strong>{{ hostel['name'] }}</strong>");
+              .bindPopup("<strong>{{ hostel['name'] }}</strong><br><text>Rating: {{ hostel['rating'] }},   Prices from: US${{ hostel['usd_prices_from'] }}</text><br><a href={{ hostel['link'] }}>Visit hostelworld page</a>");
 
             {% endfor %}
 
