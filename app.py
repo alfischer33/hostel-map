@@ -19,7 +19,7 @@ def index():
 
 @app.route('/json', methods=['GET'])
 def json():
-    return filtered_hostel_df(hostels,request.args).to_json()
+    return filtered_hostel_df(hostels,request.args).to_json(orient='index')
 
 if __name__ == "__main__":
     app.run(debug=True)
