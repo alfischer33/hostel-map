@@ -34,7 +34,9 @@ def filtered_hostel_df(hostel_df, params):
       'min_rating':0,
       'min_reviews':0,
       'max_pop_density':10000000,
-      'min_pop_density':0
+      'min_pop_density':0,
+      'limit':None,
+      'filter':None
   }
   
   def update_params(params, params_to_function):
@@ -46,7 +48,8 @@ def filtered_hostel_df(hostel_df, params):
   
   params_to_function = update_params(params, params_to_function)
   
-  
+  hostel_df['rating'] = hostel_df['rating'] * hostel_df['n_reviews'] / (hostel_df['n_reviews']+3)
+
   hostel_df = with_amenities(hostel_df, params_to_function['amenity'])
   hostel_df = hostel_df[hostel_df['name'].str.lower().str.find(params_to_function['name'].lower()) != -1]
   hostel_df = hostel_df[hostel_df['location'].str.lower().str.find(params_to_function['location'].lower()) != -1]
@@ -55,6 +58,14 @@ def filtered_hostel_df(hostel_df, params):
   hostel_df = hostel_df[hostel_df['usd_prices_from'] <= float(params_to_function['max_price'])]
   hostel_df = hostel_df[hostel_df['area_pop_density'] <= float(params_to_function['max_pop_density'])]
   hostel_df = hostel_df[hostel_df['area_pop_density'] >= float(params_to_function['min_pop_density'])]
-  
+  print(f'{len(hostel_df)} hostels match filters')
+
+  if params_to_function['filter'] != None:
+    hostel_df = hostel_df.sort_values(params_to_function['filter'], ascending=False)
+    print(f"Hostels sorted by {params_to_function['filter']}")
+
+  if params_to_function['limit'] != None:
+    hostel_df = hostel_df[:int(params_to_function['limit'])]
   print(f'{len(hostel_df)} hostels returned')
+
   return hostel_df

@@ -37,7 +37,7 @@
             {% for i, hostel in hostels.iterrows() %}
             
             marker = new L.marker([ {{ hostel.lat }}, {{ hostel.lng }} ]).addTo(map)
-              .bindPopup("<strong>{{ hostel['name'] }}</strong><br><text>Rating: {{ hostel['rating'] }},   Prices from: US${{ hostel['usd_prices_from'] }}</text><br><a href={{ hostel['link'] }}>Visit hostelworld page</a>");
+              .bindPopup("<strong>{{ hostel['name'] }}</strong><br><text>Rating: {{ '%.2f' % hostel['rating'] }},   Prices from: US${{ hostel['usd_prices_from'] }}</text><br><a href={{ hostel['link'] }}>Visit hostelworld page</a>");
 
             {% endfor %}
 
