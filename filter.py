@@ -50,6 +50,7 @@ def filtered_hostel_df(hostel_df, params):
   
   hostel_df['rating'] = hostel_df['rating'] * hostel_df['n_reviews'] / (hostel_df['n_reviews']+3)
 
+  #filter output
   hostel_df = with_amenities(hostel_df, params_to_function['amenity'])
   hostel_df = hostel_df[hostel_df['name'].str.lower().str.find(params_to_function['name'].lower()) != -1]
   hostel_df = hostel_df[hostel_df['location'].str.lower().str.find(params_to_function['location'].lower()) != -1]
@@ -60,18 +61,24 @@ def filtered_hostel_df(hostel_df, params):
   hostel_df = hostel_df[hostel_df['area_pop_density'] >= float(params_to_function['min_pop_density'])]
   print(f'{len(hostel_df)} hostels match filters')
 
+  #sort output
   if params_to_function['filter'] != None:
-    hostel_df = hostel_df.sort_values(params_to_function['filter'], ascending=False)
-    print(f"Hostels sorted by {params_to_function['filter']}")
+    if params_to_function['filter'][-4:] == '_asc':
+      ascending = True
+    else:
+      ascending = False
+  else:
+    params_to_function['filter'] = 'rating'
+    ascending = False
+  
+  hostel_df = hostel_df.sort_values(params_to_function['filter'], ascending=ascending)
+  print(f"Hostels sorted by {params_to_function['filter']}")
 
+  #limit output
   if params_to_function['limit'] == None:
     hostel_df = hostel_df[:100]
-  elif isinstance(params_to_function['limit'], str):
-    print(f"{params_to_function['limit']} is a string")
-    if params_to_function['limit'].strip().lower() == 'none':
-      hostel_df = hostel_df
-    else:
-      raise ValueError
+  elif params_to_function['limit'].strip().lower() == 'none':
+    hostel_df = hostel_df
   else:
     hostel_df = hostel_df[:int(params_to_function['limit'])]
 
