@@ -36,7 +36,7 @@ def filtered_hostel_df(hostel_df, params):
       'max_pop_density':10000000,
       'min_pop_density':0,
       'limit':None,
-      'filter':None
+      'sort':None
   }
   
   def update_params(params, params_to_function):
@@ -48,8 +48,6 @@ def filtered_hostel_df(hostel_df, params):
   
   params_to_function = update_params(params, params_to_function)
   
-  hostel_df['rating'] = hostel_df['rating'] * hostel_df['n_reviews'] / (hostel_df['n_reviews']+3)
-
   #filter output
   hostel_df = with_amenities(hostel_df, params_to_function['amenity'])
   hostel_df = hostel_df[hostel_df['name'].str.lower().str.find(params_to_function['name'].lower()) != -1]
@@ -62,18 +60,19 @@ def filtered_hostel_df(hostel_df, params):
   print(f'{len(hostel_df)} hostels match filters')
 
   #sort output
-  if params_to_function['filter'] != None:
-    if params_to_function['filter'][-4:] == '_asc':
-      params_to_function['filter'] = params_to_function['filter'][:-4]
+  if params_to_function['sort'] != None:
+    if params_to_function['sort'][-4:] == '_asc':
+      params_to_function['sort'] = params_to_function['sort'][:-4]
       ascending = True
+      print('ascending')
     else:
       ascending = False
   else:
-    params_to_function['filter'] = 'rating'
+    params_to_function['sort'] = 'rating'
     ascending = False
   
-  hostel_df = hostel_df.sort_values(params_to_function['filter'], ascending=ascending)
-  print(f"Hostels sorted by {params_to_function['filter']}")
+  hostel_df = hostel_df.sort_values(params_to_function['sort'], ascending=ascending)
+  print(f"Hostels sorted by {params_to_function['sort']}")
 
   #limit output
   if params_to_function['limit'] == None:

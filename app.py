@@ -5,6 +5,8 @@ from filter import filtered_hostel_df
 app = Flask(__name__)
 
 hostels = pd.read_json('all_hostels_coords_pop_density.json')
+hostels['rating'] = hostels['rating'] * hostels['n_reviews'] / (hostels['n_reviews']+3)
+
 #hostels = hostels[hostels['lat'].isnull() == False]
 
 @app.route('/', methods=['POST','GET'])
