@@ -64,6 +64,7 @@ def filtered_hostel_df(hostel_df, params):
   #sort output
   if params_to_function['filter'] != None:
     if params_to_function['filter'][-4:] == '_asc':
+      params_to_function['filter'] = params_to_function['filter'][:-4]
       ascending = True
     else:
       ascending = False
