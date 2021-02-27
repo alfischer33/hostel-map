@@ -36,7 +36,7 @@ def filtered_hostel_df(hostel_df, params):
       'max_pop_density':10000000,
       'min_pop_density':0,
       'limit':None,
-      'filter':None
+      'filter':100
   }
   
   def update_params(params, params_to_function):
