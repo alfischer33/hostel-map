@@ -36,7 +36,7 @@ def filtered_hostel_df(hostel_df, params):
       'max_pop_density':10000000,
       'min_pop_density':0,
       'limit':None,
-      'filter':100
+      'filter':None
   }
   
   def update_params(params, params_to_function):
@@ -64,8 +64,18 @@ def filtered_hostel_df(hostel_df, params):
     hostel_df = hostel_df.sort_values(params_to_function['filter'], ascending=False)
     print(f"Hostels sorted by {params_to_function['filter']}")
 
-  if params_to_function['limit'] != None:
+  if params_to_function['limit'] == None:
+    hostel_df = hostel_df[:100]
+  elif isinstance(params_to_function['limit'], str):
+    print(f"{params_to_function['limit']} is a string")
+    if params_to_function['limit'].strip().lower() == 'none':
+      hostel_df = hostel_df
+    else:
+      raise ValueError
+  else:
     hostel_df = hostel_df[:int(params_to_function['limit'])]
+
+
   print(f'{len(hostel_df)} hostels returned')
 
   return hostel_df
