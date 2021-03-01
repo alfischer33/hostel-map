@@ -4,8 +4,8 @@ from filter import filtered_hostel_df
 
 app = Flask(__name__)
 
-hostels = pd.read_json('all_hostels_coords_pop_density.json')
-hostels['rating'] = hostels['rating'] * hostels['n_reviews'] / (hostels['n_reviews']+3)
+hostels = pd.read_json('all_hostels_coords_pop_density.json').reset_index(drop=True)
+#hostels['rating'] = hostels['rating'] * hostels['n_reviews'] / (hostels['n_reviews']+3)
 
 #hostels = hostels[hostels['lat'].isnull() == False]
 
@@ -21,6 +21,7 @@ def index():
 
 @app.route('/json', methods=['GET'])
 def json():
+    print(filtered_hostel_df(hostels,request.args))
     return filtered_hostel_df(hostels,request.args).to_json(orient='index')
 
 if __name__ == "__main__":

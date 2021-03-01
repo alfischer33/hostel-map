@@ -74,6 +74,8 @@ def filtered_hostel_df(hostel_df, params):
   hostel_df = hostel_df.sort_values(params_to_function['sort'], ascending=ascending)
   print(f"Hostels sorted by {params_to_function['sort']}")
 
+  hostel_df = hostel_df[hostel_df.index.duplicated()==False]
+
   #limit output
   if params_to_function['limit'] == None:
     hostel_df = hostel_df[:100]
