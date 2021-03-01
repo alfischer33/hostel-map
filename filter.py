@@ -79,6 +79,8 @@ def filtered_hostel_df(hostel_df, params):
     hostel_df = hostel_df[:100]
   elif params_to_function['limit'].strip().lower() == 'none':
     hostel_df = hostel_df
+  elif int(params_to_function['limit']) >= len(hostel_df):
+    hostel_df = hostel_df
   else:
     hostel_df = hostel_df[:int(params_to_function['limit'])]
 
